@@ -1,45 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Doctor Appointment Booking</title>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 30px;
-      background-color: #f9f9f9;
-    }
-    h1 {
-      text-align: center;
-      color: #4CAF50;
-    }
-    form {
-      max-width: 400px;
-      margin: 0 auto;
-      background-color: white;
-      padding: 50px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-    }
-  </style>
 </head>
 <body>
-  <h1>Book Your Appointment</h1>
-  <form action="https://formspree.io/f/mrbqlbpv" 
-  method="POST">
+  <h1>Book an Appointment</h1>
+  <form id="appointmentForm">
     <label for="name">Full Name:</label>
     <input type="text" id="name" name="name" required>
 
@@ -54,5 +22,28 @@
 
     <button type="submit">Book Appointment</button>
   </form>
+
+  <p id="response"></p>
+
+  <script>
+    document.getElementById("appointmentForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const formData = {
+        name: document.getElementById("name").value,
+        email: document.getElementById("email").value,
+        datetime: document.getElementById("datetime").value,
+        reason: document.getElementById("reason").value
+      };
+
+      const response = await fetch("https://appointment-booking-api.azurewebsites.net/api/bookAppointment?code=7DKK-NaT0MSHFIRA2R8PA28GIIjYb3ZQftv6uYpe2CEtAzFug_ZLMA==", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await response.text();
+      document.getElementById("response").innerText = result;
+    });
+  </script>
 </body>
 </html>
